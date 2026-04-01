@@ -1,1 +1,1 @@
-Um cliente de VPN alternativo para WireGuard com recursos adicionais
+Um cliente VPN WireGuard e AmneziaWG com tunelamento automático, bloqueio e proxy.
