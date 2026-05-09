@@ -5,7 +5,7 @@
     <string name="tunnels">Тунелі</string>
     <string name="okay">ОК</string>
     <string name="tunnel_on_ethernet">Тунелювати Ethernet</string>
-    <string name="prominent_background_location_title">Фонова передача місцезнаходження</string>
+    <string name="prominent_background_location_title">Фонова передача геолокації</string>
     <string name="trusted_ssid_value_description">Підтвердити SSID</string>
     <string name="tunnel_name">Ім\'я тунелю</string>
     <string name="include">Включити</string>
@@ -17,7 +17,7 @@
     <string name="optional">(необов\'язково)</string>
     <string name="cancel">Скасувати</string>
     <string name="email_chooser">Надіслати E-Mail…</string>
-    <string name="error_root_denied">Root доступ заборонено</string>
+    <string name="error_root_denied">Рут-доступ заборонено</string>
     <string name="incorrect_pin">Невірний PIN-код</string>
     <string name="transport_packet_magic_header">Заголовок транспортного пакету</string>
     <string name="getting_started_guide">інструкція щодо початку роботи</string>
@@ -26,7 +26,7 @@
     <string name="tunnel_mobile_data">Тунелювати мобільні дані</string>
     <string name="privacy_policy">Переглянути політику конфіденційності</string>
     <string name="thank_you">Спасибі за використання WG Tunnel!</string>
-    <string name="prominent_background_location_message">Дана функція потребує фоновий доступ до служби місцезнаходження для моніторингу назви мереж Wi-Fi навіть коли додаток закрито. Для отримання додаткової інформації прочитайте політику приватності на екрані Підтримки.</string>
+    <string name="prominent_background_location_message">Дана функція потребує фоновий доступ до служби геолокації для моніторингу назви мереж Wi-Fi навіть коли додаток закрито. Для отримання додаткової інформації прочитайте політику приватності на екрані Підтримки.</string>
     <string name="add_tunnels_text">Додати з файлу або архіву</string>
     <string name="exclude">Виключити</string>
     <string name="add_from_qr">Додати з QR коду</string>
@@ -39,7 +39,7 @@
     <string name="endpoint">Кінцева точка</string>
     <string name="name">Ім\'я</string>
     <string name="always_on_vpn_support">Дозволили Always-ON VPN</string>
-    <string name="location_services_not_detected">Сервіси місце знаходження не знайдено</string>
+    <string name="location_services_not_detected">Сервіси геолокації не знайдено</string>
     <string name="auto_tunneling">Авто-тунелювання</string>
     <string name="vpn_on">VPN увімк.</string>
     <string name="vpn_off">VPN вимк.</string>
@@ -64,13 +64,13 @@
     <string name="delete_tunnel_message">Ви дійсно хочете видалити цей тунель?</string>
     <string name="yes">Так</string>
     <string name="auto">(авто)</string>
-    <string name="all">всі</string>
+    <string name="all">Всі</string>
     <string name="no_email_detected">Програми для надсилання email не знайдено</string>
     <string name="open_issue">Повідомити про проблему</string>
     <string name="no_browser_detected">Веб браузер не знайдено</string>
     <string name="pin_created">PIN-код створено успішно</string>
     <string name="enter_pin">Введіть PIN-код</string>
-    <string name="create_pin">Створити PINhкод</string>
+    <string name="create_pin">Створити PIN-код</string>
     <string name="enable_app_lock">Увімкнути блокування додатку</string>
     <string name="edit_tunnel">Редагувати тунель</string>
     <string name="set_primary_tunnel">Встановити як основний тунель</string>
@@ -104,7 +104,7 @@
     <string name="restart_at_boot">Перезапуск під час завантаження</string>
     <string name="vpn_settings">Системні налаштування VPN</string>
     <string name="always_on_message">Дозвіл на VPN-з\'єднання було відхилено, перевірте</string>
-    <string name="root_accepted">Root-доступ дозволено</string>
+    <string name="root_accepted">Рут-доступ дозволено</string>
     <string name="logs">Журнали</string>
     <string name="mobile_tunnel">Тунель для мобільних даних</string>
     <string name="display_theme">Тема</string>
@@ -112,7 +112,7 @@
     <string name="never">Ніколи</string>
     <string name="appearance">Зовнішній вигляд</string>
     <string name="dynamic">Динамічна</string>
-    <string name="use_root_shell_for_wifi">Використовувати root-доступ для отримання імені мережі Wi-Fi</string>
+    <string name="use_root_shell_for_wifi">Використовувати рут-доступ для отримання імені мережі Wi-Fi</string>
     <string name="use_wildcards">Використовувати підстановочні знаки в імені</string>
     <string name="always_on_message2">, щоб переконатися, що функція «Постійний VPN» вимкнена для всіх інших програм, і спробуйте ще раз</string>
     <string name="advanced_settings">Додаткові налаштування</string>
@@ -127,7 +127,7 @@
     <string name="bypass_lan_for_kill_switch">Дозволяти трафік LAN при екстреному вимкненні</string>
     <string name="auto_tunnel_channel_name">Канал сповіщень автотунелю</string>
     <string name="auto_tunnel_channel_description">Канал сповіщень про стан автотунелю</string>
-    <string name="stop">Стоп</string>
+    <string name="stop">Зупинити</string>
     <string name="splt_tunneling">Роздільне тунелювання</string>
     <string name="show_scripts">Показати сценарії</string>
     <string name="pre_up">До активації</string>
@@ -166,7 +166,7 @@
     <string name="error_download_failed">Не вдалося завантажити конфігурацію</string>
     <string name="remote_key">Віддалений ключ</string>
     <string name="mobile_data">Мобільні дані</string>
-    <string name="use_shell_via_shizuku">Використовувати оболонки через Shizuku для отримання інформації про Wi-Fi. Це дозволяє уникнути потреби в дозволі на доступ до геопозиції на пристроях без Рут-прав.</string>
+    <string name="use_shell_via_shizuku">Використовувати оболонки через Shizuku для отримання інформації про Wi-Fi. Це дозволяє уникнути потреби в дозволі на доступ до геолокації на пристроях без Рут-прав.</string>
     <string name="vpn">VPN</string>
     <string name="tunnel_boot_description">Запускати тунель за замовчуванням під час завантаження</string>
     <string name="prefer_ipv6_resolution">Визначення адрес пірів за IPv6</string>
@@ -176,14 +176,14 @@
     <string name="http_bind_address">Адреса прив\'язки HTTP</string>
     <string name="amnezia">Amnezia</string>
     <string name="tunnel_mapping_description">Відображати тунелі за назвою Wi-Fi</string>
-    <string name="tunnel_name_taken">Таке ім\'я тунелю вже зайняте</string>
+    <string name="tunnel_name_taken">Таке ім\'я тунелю вже зайняте.</string>
     <string name="check_for_update">Перевірити оновлення</string>
     <string name="mimic_dns">Імітація DNS</string>
     <string name="unknown_attribute">Невідомий атрибут</string>
     <string name="donation_prompt_prefix">Дякуємо за використання WG Tunnel! Будемо вдячні за підтримку.</string>
     <string name="hint_template">(%1$s)</string>
     <string name="socks_5_bind_address">Адреса прив\'язки SOCKS5</string>
-    <string name="root_required_template">%1$s (root required)</string>
+    <string name="root_required_template">%1$s (потрібен рут)</string>
     <string name="website">Веб-сторінка застосунку</string>
     <string name="mimic_quic">Імітація QUIC</string>
     <string name="show_qr">Показати QR-код</string>
@@ -192,7 +192,7 @@
     <string name="backup_success">Рез. копіювання успішне. %1$s</string>
     <string name="inactive">Неактивний</string>
     <string name="invalid_value">Недійсне значення</string>
-    <string name="info">Info</string>
+    <string name="info">Інформація</string>
     <string name="pinger_bounce_successful">Тунель успішно перезапущено пінгером.</string>
     <string name="backup_failed">Не вдалося створити резервну копію.</string>
     <string name="unknown_section">Невідомий розділ</string>
@@ -203,7 +203,7 @@
     <string name="all_services_disabled">Вимкніть автотунель та тунелі, щоб виконати цю дію.</string>
     <string name="ping_timeout">Тайм-аут пінгу</string>
     <string name="pinger_bounce_recovery">Помилка перезапуску пінгера. Тунель відновлено зі старими адресами.</string>
-    <string name="defaults_to_template">"(за замовчуванням  %1$s)"</string>
+    <string name="defaults_to_template">(за замовчуванням %1$s)</string>
     <string name="delete_logs">Видалити та очистити журнали</string>
     <string name="ddns_auto_update_description">Автоматичне оновлення IP-адреси при зміні налаштувань DDNS</string>
     <string name="copy">Копіювати</string>
@@ -215,7 +215,7 @@
     <string name="wifi">Wi-Fi</string>
     <string name="packet_loss_template">Втрачено пакетів: %.2f%%</string>
     <string name="update_check_failed">Перевірка оновлень не вдалася.</string>
-    <string name="dns_resolve_error">DNS resolution failed</string>
+    <string name="dns_resolve_error">Помилка перетворення DNS</string>
     <string name="ping_target">Ціль пінгу</string>
     <string name="update_available">Доступне оновлення!</string>
     <string name="dns_provider">Постачальник DNS</string>
@@ -235,7 +235,7 @@
     <string name="back">Назад</string>
     <string name="liberapay">Liberapay</string>
     <string name="ip_or_hostname">IP адреса або назва хоста</string>
-    <string name="flavor_template">Flavor: %1$s</string>
+    <string name="flavor_template">Джерело: %1$s</string>
     <string name="delete">Видалити</string>
     <string name="donate_title">Подяка</string>
     <string name="active_tunnel_update_failed">Не вдалося оновити активний тунель</string>
@@ -282,7 +282,7 @@
     <string name="export_tunnels_wireguard">Експортувати тунелі як WireGuard</string>
     <string name="wifi_detection_method">Метод виявлення Wi-Fi</string>
     <string name="tunnel">тунель</string>
-    <string name="legacy_api_description">Використовувати застарілий метод Android 12 для отримання інформації про Wi-Fi, що обмежує запити до геопозиції, але може працювати нестабільно на новіших пристроях.</string>
+    <string name="legacy_api_description">Використовувати застарілий метод Android 12 для отримання інформації про Wi-Fi, що обмежує запити до геолокації, але може працювати нестабільно на новіших пристроях.</string>
     <string name="active">Активний</string>
     <string name="security_type">Безпека:</string>
     <string name="export_tunnels_amnezia">Експортувати тунелі як Amnezia</string>
@@ -328,11 +328,11 @@
     <string name="packets_sent_template">Пакетів надіслано: %1$s</string>
     <string name="auth_error">Несанкціонований</string>
     <string name="kernel_name_special_characters">Назва тунелю в режимі ядра не може містити пробілів або певних спеціальних символів (дозволено: літери та цифри, _, =, +, ., -)</string>
-    <string name="kernel_name_error">Kernel module name error</string>
+    <string name="kernel_name_error">Помилка імені модуля ядра</string>
     <string name="sort">Сортування</string>
     <string name="_continue">Продовжити</string>
-    <string name="_false">False</string>
-    <string name="config_error">Invalid config</string>
+    <string name="_false">Хиба</string>
+    <string name="config_error">Некоректна конфігурація</string>
     <string name="mimic_sip">Імітація SIP</string>
     <string name="update_check_unsupported">Перевірка оновлень не підтримується для цього типу збірки.</string>
     <string name="expiremental_template">%1$s (експериментальний)</string>
@@ -362,7 +362,7 @@
     <string name="dns_settings">Налаштування DNS</string>
     <string name="_default">За замовчуванням</string>
     <string name="ping_monitor">Монітор пінгу</string>
-    <string name="read_failed">Не вдалося прочитати дані</string>
+    <string name="read_failed">Не вдалося прочитати дані.</string>
     <string name="crypto">Адреси криптовалют</string>
     <string name="system">Система</string>
     <string name="error_tunnel_name">У режимі ядра назва тунелю повинна містити не більше 15 символів</string>
@@ -373,7 +373,7 @@
     <string name="metered_tunnel">Тунель з обмеженим трафіком</string>
     <string name="shizuku">Shizuku</string>
     <string name="lockdown_settings">Налаштування блокування</string>
-    <string name="_true">True</string>
+    <string name="_true">Істина</string>
     <string name="networks">Мережі</string>
     <string name="auto_tunnel_not_running">Автоматичний тунель не запущено</string>
     <string name="jitter_template">Джитер: %1$s</string>
