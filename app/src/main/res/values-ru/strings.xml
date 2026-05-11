@@ -163,7 +163,7 @@
     <string name="enter_config_url">Введите URL конфигурации</string>
     <string name="tunnel_error_template">Ошибка туннеля: %1$s</string>
     <string name="service_running_error">Не запущен сервис</string>
-    <string name="app_permission_description">Управление туннелями и функцией автоматического туннелирования.</string>
+    <string name="app_permission_description">https://hosted.weblate.org/translate/wg-tunnel/strings/en/?checksum=e52d7eb2e28a9a12Управление туннелями и функцией автоматического туннелирования.</string>
     <string name="join_telegram">Сообщество в Telegram</string>
     <string name="matrix_url">https://matrix.to/#/#wg-tunnel-space:matrix.org</string>
     <string name="camera_permission_required">Требуется доступ к камере</string>
