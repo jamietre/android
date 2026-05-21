@@ -16,7 +16,7 @@
     <string name="endpoint">Point de sortie</string>
     <string name="name">Nom</string>
     <string name="always_on_vpn_support">Autoriser le VPN permanent</string>
-    <string name="location_services_not_detected">Services de traduction non détectés</string>
+    <string name="location_services_not_detected">Services de localisation non détectés</string>
     <string name="auto_tunneling">Tunnel automatique</string>
     <string name="vpn_off">VPN éteint</string>
     <string name="add_peer">Ajouter un pair</string>
@@ -98,7 +98,7 @@
     <string name="always_on_message">Connexion au VPN interdite. Merci de vérifier les</string>
     <string name="always_on_message2">afin de s\'assurer que le VPN permanent est désactivé pour toutes les autres applis puis réessayer</string>
     <string name="add_from_clipboard">Ajouter depuis le presse-papiers</string>
-    <string name="primary_tunnel">Tunnel principal</string>
+    <string name="primary_tunnel">Tunnel par défaut</string>
     <string name="stop_auto">Arrêter l\'auto-tunnel</string>
     <string name="appearance">Apparence</string>
     <string name="notifications">Notifications</string>
@@ -116,11 +116,11 @@
     <string name="learn_more">En savoir plus</string>
     <string name="use_wildcards">Utiliser les wildcards</string>
     <string name="wildcards_active">Wildcards activé</string>
-    <string name="use_root_shell_for_wifi">Utiliser un shell root pour obtenir le nom du wifi</string>
+    <string name="use_root_shell_for_wifi">Utiliser un shell root pour obtenir les informations wifi, évitant ainsi d\'avoir besoin d\'autorisations pour accéder à la localisation</string>
     <string name="tunnel_running">Tunnel en cours d\'exécution</string>
     <string name="monitoring_state_changes">Surveille les changements d’état</string>
     <string name="donate">Faire un don au projet</string>
-    <string name="local_logging">Journalisation locale</string>
+    <string name="local_logging">Moniteur des journaux locaux</string>
     <string name="start_auto">Démarrer l\'auto-tunnel</string>
     <string name="exclude_lan">Exclure le LAN</string>
     <string name="show_scripts">Voir les scripts</string>
@@ -178,7 +178,7 @@
     <string name="tunnel_monitoring">Tunnel monitoring</string>
     <string name="licenses">Licenses</string>
     <string name="http_bind_address">HTTP bind address</string>
-    <string name="vpn_channel_description">A channel for VPN state notifications</string>
+    <string name="vpn_channel_description">Un canal pour les notifications d\'état des VPN</string>
     <string name="amnezia">Amnezia</string>
     <string name="tunnel_mapping_description">Map tunnels as preferred by Wi-Fi name</string>
     <string name="tunnel_name_taken">Tunnel name is already used.</string>
