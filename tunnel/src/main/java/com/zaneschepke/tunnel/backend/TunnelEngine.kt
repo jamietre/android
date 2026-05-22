@@ -14,9 +14,9 @@ internal interface TunnelEngine {
     val status: Flow<NativeTunnelStatus>
     val state: Flow<EngineState>
 
-    suspend fun start(tunnel: Tunnel, mode: BackendMode): EngineStartResult
+    fun start(tunnel: Tunnel, mode: BackendMode): EngineStartResult
 
-    suspend fun stop(handle: Int, mode: BackendMode)
+    fun stop(handle: Int, mode: BackendMode)
 
     suspend fun updatePeers(handle: Int, mode: BackendMode, peers: List<PeerSection>)
 

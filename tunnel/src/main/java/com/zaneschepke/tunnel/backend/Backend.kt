@@ -27,7 +27,8 @@ interface Backend {
 
     suspend fun setBootstrapDnsMode(mode: DnsBoostrapMode)
 
-    suspend fun stopAllOfType(modeClass: KClass<out BackendMode>): Result<Unit>
+    // Emergency synchronous teardown to be called only from Service.onDestroy()
+    fun emergencyStopAllOfTypeSync(modeClass: KClass<out BackendMode>)
 
     suspend fun stopAllActiveTunnels(): Result<Unit>
 

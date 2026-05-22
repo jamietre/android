@@ -1,12 +1,10 @@
 package com.zaneschepke.hevtunnel
 
 import android.content.Context
-import androidx.annotation.Keep
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 
-@Keep
 object TProxyService {
     private const val HEV_CONFIG_FILE_NAME: String = "tproxy.conf"
     private const val TASK_STACK_SIZE = 24576
@@ -42,8 +40,7 @@ object TProxyService {
     """
                 .trimIndent()
 
-        FileOutputStream(tproxyFile, false).use { fos -> fos.write(hevConf.toByteArray()) }
-
+        FileOutputStream(tproxyFile, false).use { it.write(hevConf.toByteArray()) }
         return tproxyFile
     }
 }

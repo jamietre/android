@@ -209,15 +209,9 @@ class TunnelBackend(
         }
     }
 
-    override suspend fun stopAllOfType(modeClass: KClass<out BackendMode>): Result<Unit> =
-        runCatching {
-            val idsToStop =
-                _status.value.activeTunnels
-                    .filter { (_, activeTunnel) -> modeClass.isInstance(activeTunnel.mode) }
-                    .keys
-
-            idsToStop.forEach { id -> stop(id) }
-        }
+    override fun emergencyStopAllOfTypeSync(modeClass: KClass<out BackendMode>) {
+        actor.emergencyStopAllOfType(modeClass)
+    }
 
     override suspend fun stopAllActiveTunnels(): Result<Unit> = runCatching {
         _status.value.activeTunnels.forEach { (id, _) -> stop(id) }

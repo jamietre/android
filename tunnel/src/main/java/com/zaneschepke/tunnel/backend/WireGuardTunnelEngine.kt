@@ -5,6 +5,7 @@ import com.zaneschepke.tunnel.Tunnel
 import com.zaneschepke.tunnel.VpnBackend
 import com.zaneschepke.tunnel.model.BackendMode
 import com.zaneschepke.tunnel.model.ProxyConfig
+import com.zaneschepke.tunnel.service.VpnService
 import com.zaneschepke.tunnel.state.EngineStartResult
 import com.zaneschepke.tunnel.state.EngineState
 import com.zaneschepke.tunnel.state.NativeTunnelStatus
@@ -22,13 +23,11 @@ internal class WireGuardTunnelEngine(
     stateProvider: EngineStateProvider,
 ) : TunnelEngine {
 
-    private val proxyPass = UUID.randomUUID().toString()
-
     override val status: Flow<NativeTunnelStatus> = serviceHolder.nativeStatuses
 
     override val state: Flow<EngineState> = stateProvider.state
 
-    override suspend fun start(tunnel: Tunnel, mode: BackendMode): EngineStartResult {
+    override fun start(tunnel: Tunnel, mode: BackendMode): EngineStartResult {
 
         val ifName = WGT_INTERFACE_PREFIX + tunnel.id
 
@@ -80,8 +79,8 @@ internal class WireGuardTunnelEngine(
             socks5 =
                 ProxyConfig.Socks5(
                     port = getAvailablePort(),
-                    username = LOCKDOWN_USER,
-                    password = proxyPass,
+                    username = VpnService.LOCKDOWN_USERNAME,
+                    password = UUID.randomUUID().toString(),
                 )
         )
     }
@@ -111,8 +110,8 @@ internal class WireGuardTunnelEngine(
     @Throws(IOException::class)
     private fun getAvailablePort(): Int {
         ServerSocket(0).use { socket ->
-            socket.setReuseAddress(true)
-            return socket.getLocalPort()
+            socket.reuseAddress = true
+            return socket.localPort
         }
     }
 
@@ -121,7 +120,7 @@ internal class WireGuardTunnelEngine(
         return peer.copy(endpoint = null)
     }
 
-    override suspend fun stop(handle: Int, mode: BackendMode) {
+    override fun stop(handle: Int, mode: BackendMode) {
         when (mode) {
             is BackendMode.Proxy -> {
                 ProxyBackend.awgTurnProxyTunnelOff(handle)
@@ -179,7 +178,17 @@ internal class WireGuardTunnelEngine(
         }
 
         if (withBridge) {
-            serviceHolder.getVpnService().startHevSocks5Bridge()
+            val port =
+                proxyConfig.socks5?.port
+                    ?: throw BackendException.InternalError(
+                        "Bridge port not set for kill switch proxy config"
+                    )
+            val pass =
+                proxyConfig.socks5.password
+                    ?: throw BackendException.InternalError(
+                        "Bridge pass not set for kill switch proxy config"
+                    )
+            serviceHolder.getVpnService().startHevSocks5Bridge(port, pass)
         }
 
         return handle
@@ -194,7 +203,6 @@ internal class WireGuardTunnelEngine(
     }
 
     companion object {
-        const val LOCKDOWN_USER = "local"
         const val WGT_INTERFACE_PREFIX = "wgtun"
     }
 }

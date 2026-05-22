@@ -26,6 +26,7 @@ import com.zaneschepke.tunnel.state.TunnelRuntimeState
 import com.zaneschepke.tunnel.util.RootShellException
 import com.zaneschepke.tunnel.util.buildResolvedPeers
 import com.zaneschepke.tunnel.util.exponentialBackoffForever
+import kotlin.reflect.KClass
 import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -621,6 +622,27 @@ internal class TunnelActor(
                 state.copy(killSwitchEnabled = event.enabled)
             }
         }
+    }
+
+    fun emergencyStop(tunnelId: Int) {
+        val runtime = _state.value.byTunnelId[tunnelId] ?: return
+        val handle = runtime.running.handle
+        val mode = runtime.running.mode
+
+        Timber.d("Emergency stop tunnel $tunnelId (handle=$handle, mode=$mode)")
+
+        engine.stop(handle, mode)
+
+        // Immediately clean up actor state
+        stopTunnel(tunnelId, handle)
+    }
+
+    // Convenience method for services
+    fun emergencyStopAllOfType(modeClass: KClass<out BackendMode>) {
+        _state.value.byTunnelId
+            .filter { (_, runtime) -> modeClass.isInstance(runtime.running.mode) }
+            .keys
+            .forEach { emergencyStop(it) }
     }
 
     suspend fun resolvePeers(runningTunnel: RunningTunnel): Map<PublicKey, DnsBootstrapResult> {

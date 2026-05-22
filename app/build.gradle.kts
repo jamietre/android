@@ -171,7 +171,7 @@ androidComponents {
                 } else {
                     "${baseFileName}.apk"
                 }
-            
+
             output.outputFileName.set(outputFileName)
         }
     }

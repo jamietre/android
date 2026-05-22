@@ -10,16 +10,13 @@ class AutoTunnelCoordinator(
     private val autoTunnelStateHolder: AutoTunnelStateHolder,
 ) {
 
-    suspend fun shouldTakeOverBoot(): Boolean {
+    suspend fun shouldRestore(): Boolean {
         val settings = repository.getAutoTunnelSettings()
         return settings.startOnBoot && settings.isAutoTunnelEnabled
     }
 
-    suspend fun restoreIfNeeded(): Boolean {
-        if (!shouldTakeOverBoot()) return false
-
+    fun start() {
         serviceManager.startAutoTunnelService()
-        return true
     }
 
     suspend fun enable() {

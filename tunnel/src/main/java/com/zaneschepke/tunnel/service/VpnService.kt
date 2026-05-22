@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Build
 import android.os.ParcelFileDescriptor
 import android.system.OsConstants
-import androidx.annotation.Keep
 import androidx.core.app.ServiceCompat
 import com.zaneschepke.hevtunnel.HevTunnelConfig
 import com.zaneschepke.hevtunnel.TProxyService
@@ -23,15 +22,13 @@ import com.zaneschepke.tunnel.util.parseDns
 import com.zaneschepke.tunnel.util.parseInetNetwork
 import com.zaneschepke.wireguardautotunnel.parser.Config
 import java.io.IOException
-import java.net.ServerSocket
-import java.util.UUID
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import org.koin.java.KoinJavaComponent.inject
 import timber.log.Timber
 
@@ -39,8 +36,6 @@ class VpnService : android.net.VpnService(), KillSwitch, SocketProtector {
 
     private val backend: Backend by inject(Backend::class.java)
     private val serviceHolder: ServiceHolder by inject(ServiceHolder::class.java)
-
-    private val defaultPass = UUID.randomUUID().toString()
 
     private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private var hevBridgeJob: Job? = null
@@ -79,10 +74,10 @@ class VpnService : android.net.VpnService(), KillSwitch, SocketProtector {
 
         serviceScope.cancel()
 
-        runBlocking {
-            backend.stopAllOfType(BackendMode.Vpn::class)
-            backend.stopAllOfType(BackendMode.Proxy.KillSwitchPrimary::class)
-        }
+        backend.emergencyStopAllOfTypeSync(BackendMode.Vpn::class)
+        backend.emergencyStopAllOfTypeSync(BackendMode.Proxy.KillSwitchPrimary::class)
+
+        stopHevSocks5Bridge()
 
         serviceHolder.clear(this)
 
@@ -105,40 +100,61 @@ class VpnService : android.net.VpnService(), KillSwitch, SocketProtector {
         return START_STICKY
     }
 
-    private fun startHevBridge(): Job {
+    private fun startHevBridge(port: Int, pass: String): Job {
         val job = serviceScope.launch {
             try {
-                val port = getAvailablePort()
-                val fd = fd ?: throw IOException("No VPN interface fd available")
-                val config =
-                    HevTunnelConfig(
-                        port = port,
-                        mtu = DEFAULT_MTU,
-                        ipv4 = IPV4_INTERFACE_ADDRESS,
-                        ipv6 = IPV6_INTERFACE_ADDRESS,
-                        address = LOCALHOST,
-                        username = DEFAULT_USERNAME,
-                        password = defaultPass,
-                    )
-                val hevConfigFile = TProxyService.createHevTunnelConfig(config, this@VpnService)
-                TProxyService.TProxyStartService(hevConfigFile.absolutePath, fd.fd)
-            } catch (e: IOException) {
-                Timber.e(e)
+                val vpnFd = fd ?: throw IOException("No VPN interface fd available")
+
+                repeat(60) { attempt ->
+                    try {
+                        java.net.Socket().use { socket ->
+                            socket.connect(java.net.InetSocketAddress(LOCALHOST, port), 800)
+                        }
+
+                        Timber.d(
+                            "SOCKS5 proxy is ready on port $port, starting HEV bridge (attempt ${attempt + 1})"
+                        )
+
+                        val config =
+                            HevTunnelConfig(
+                                port = port,
+                                mtu = DEFAULT_MTU,
+                                ipv4 = IPV4_INTERFACE_ADDRESS,
+                                ipv6 = IPV6_INTERFACE_ADDRESS,
+                                address = LOCALHOST,
+                                username = LOCKDOWN_USERNAME,
+                                password = pass,
+                            )
+                        val hevConfigFile =
+                            TProxyService.createHevTunnelConfig(config, this@VpnService)
+                        TProxyService.TProxyStartService(hevConfigFile.absolutePath, vpnFd.fd)
+
+                        Timber.d("HEV bridge started successfully - coroutine can now exit")
+                        return@launch // safe to exit as hev handles own threading internally
+                    } catch (e: Exception) {
+                        Timber.w(e, "SOCKS5 connect failed (attempt ${attempt + 1})")
+                        if (attempt % 5 == 0) {
+                            Timber.d("SOCKS5 not ready yet, retrying...")
+                        }
+                        delay(300)
+                    }
+                }
+                Timber.e("Timed out waiting for SOCKS5 proxy to be ready")
+            } catch (e: Exception) {
+                Timber.e(e, "Failed to start HEV bridge")
             }
         }
-        job.invokeOnCompletion {
-            TProxyService.TProxyStopService()
+
+        // stop HEV when the job is canceled from stopHevSocks5Bridge or onDestroy
+        job.invokeOnCompletion { cause ->
+            if (cause != null) { // canceled or failed
+                Timber.d("HEV bridge job stopped - shutting down native HEV")
+                TProxyService.TProxyStopService()
+            }
             hevBridgeJob = null
         }
-        return job
-    }
 
-    @Throws(IOException::class)
-    private fun getAvailablePort(): Int {
-        ServerSocket(0).use { socket ->
-            socket.setReuseAddress(true)
-            return socket.getLocalPort()
-        }
+        return job
     }
 
     private fun disableKillSwitch() {
@@ -164,11 +180,15 @@ class VpnService : android.net.VpnService(), KillSwitch, SocketProtector {
                         }
                     }
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                        builder.setMetered(config.metered)
+                        setMetered(config.metered)
                     }
                     addRoute(IPV6_DEFAULT_ROUTE, 0)
                     setMtu(DEFAULT_MTU)
                     addDnsServer(DEFAULT_DNS_SERVER)
+
+                    // TODO could add an options to kill switch settings for this for ping
+                    // sorts/update checks, etc to bypass killswitch
+                    // addDisallowedApplication(this@VpnService.packageName)
                 }
                 .establish()
     }
@@ -216,14 +236,20 @@ class VpnService : android.net.VpnService(), KillSwitch, SocketProtector {
             .establish()
     }
 
-    override fun startHevSocks5Bridge() {
+    override fun startHevSocks5Bridge(port: Int, pass: String) {
         if (hevBridgeJob != null) return
-        hevBridgeJob = startHevBridge()
+        hevBridgeJob = startHevBridge(port, pass)
     }
 
     override fun stopHevSocks5Bridge() {
         hevBridgeJob?.cancel()
         hevBridgeJob = null
+
+        try {
+            TProxyService.TProxyStopService()
+        } catch (e: Exception) {
+            Timber.w(e, "TProxyStopService failed, may already be stopped")
+        }
     }
 
     override fun bypass(fd: Int): Int {
@@ -248,7 +274,7 @@ class VpnService : android.net.VpnService(), KillSwitch, SocketProtector {
         private const val LOCALHOST = "127.0.0.1"
         private const val IPV4_INTERFACE_ADDRESS = "10.0.0.1"
         private const val IPV6_INTERFACE_ADDRESS = "2001:db8::1"
-        private const val DEFAULT_USERNAME = "local"
+        const val LOCKDOWN_USERNAME = "local"
         private const val IPV4_DEFAULT_ROUTE = "0.0.0.0"
         private const val IPV6_DEFAULT_ROUTE = "::"
         private const val DEFAULT_DNS_SERVER = "1.1.1.1"

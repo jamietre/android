@@ -7,7 +7,6 @@ import com.zaneschepke.tunnel.backend.Backend
 import com.zaneschepke.tunnel.backend.ServiceHolder
 import com.zaneschepke.tunnel.backend.ServiceHolder.Companion.alwaysOnCallback
 import com.zaneschepke.tunnel.model.BackendMode
-import kotlinx.coroutines.runBlocking
 import org.koin.java.KoinJavaComponent.inject
 import timber.log.Timber
 
@@ -42,7 +41,7 @@ class TunnelService : LifecycleService() {
     }
 
     override fun onDestroy() {
-        runBlocking { backend.stopAllOfType(BackendMode.Proxy.Standard::class) }
+        backend.emergencyStopAllOfTypeSync(BackendMode.Proxy.Standard::class)
 
         ServiceCompat.stopForeground(this, ServiceCompat.STOP_FOREGROUND_REMOVE)
         serviceHolder.clear(this)
