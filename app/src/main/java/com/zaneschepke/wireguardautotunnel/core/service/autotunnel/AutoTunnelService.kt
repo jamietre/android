@@ -10,6 +10,7 @@ import com.zaneschepke.wireguardautotunnel.R
 import com.zaneschepke.wireguardautotunnel.core.notification.AndroidNotificationService
 import com.zaneschepke.wireguardautotunnel.core.notification.NotificationService
 import com.zaneschepke.wireguardautotunnel.core.orchestration.TunnelCoordinator
+import com.zaneschepke.wireguardautotunnel.core.service.tile.AutoTunnelTileRefresher
 import com.zaneschepke.wireguardautotunnel.di.Dispatcher
 import com.zaneschepke.wireguardautotunnel.domain.enums.NotificationAction
 import com.zaneschepke.wireguardautotunnel.domain.enums.TunnelActionSource
@@ -113,6 +114,7 @@ class AutoTunnelService : LifecycleService() {
 
     fun start() {
         stateHolder.setActive(true)
+        AutoTunnelTileRefresher.refresh(this)
         launchWatcherNotification()
         autoTunnelJob?.cancel()
         autoTunnelJob = startAutoTunnelStateJob()
@@ -130,6 +132,7 @@ class AutoTunnelService : LifecycleService() {
     override fun onDestroy() {
         ServiceCompat.stopForeground(this, ServiceCompat.STOP_FOREGROUND_REMOVE)
         stateHolder.setActive(false)
+        AutoTunnelTileRefresher.refresh(this)
         super.onDestroy()
     }
 

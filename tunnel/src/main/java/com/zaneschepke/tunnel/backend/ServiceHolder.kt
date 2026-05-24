@@ -18,7 +18,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import timber.log.Timber
 
-internal class ServiceHolder(private val context: Context) {
+internal class ServiceHolder(val context: Context) {
 
     internal val uapiPath = context.dataDir.absolutePath
 

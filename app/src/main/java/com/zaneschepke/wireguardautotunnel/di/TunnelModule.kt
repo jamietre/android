@@ -1,6 +1,7 @@
 package com.zaneschepke.wireguardautotunnel.di
 
 import android.app.Notification
+import android.content.Context
 import com.zaneschepke.networkmonitor.AndroidNetworkMonitor
 import com.zaneschepke.networkmonitor.NetworkMonitor
 import com.zaneschepke.networkmonitor.StableNetworkEngine
@@ -15,6 +16,7 @@ import com.zaneschepke.wireguardautotunnel.core.notification.NotificationService
 import com.zaneschepke.wireguardautotunnel.core.notification.NotificationService.Companion.PROXY_GROUP_KEY
 import com.zaneschepke.wireguardautotunnel.core.notification.NotificationService.Companion.VPN_GROUP_KEY
 import com.zaneschepke.wireguardautotunnel.core.notification.TunnelNotificationService
+import com.zaneschepke.wireguardautotunnel.core.service.tile.TunnelTileRefresher
 import com.zaneschepke.wireguardautotunnel.core.tunnel.TunnelBackendProvider
 import com.zaneschepke.wireguardautotunnel.core.tunnel.TunnelProvider
 import com.zaneschepke.wireguardautotunnel.domain.repository.AutoTunnelSettingsRepository
@@ -62,6 +64,10 @@ val tunnelBackendProviderModule = module {
 
             override val proxyNotificationId: Int
                 get() = NotificationService.PROXY_NOTIFICATION_ID
+
+            override fun refreshTile(context: Context) {
+                TunnelTileRefresher.refresh(context)
+            }
         }
     }
 

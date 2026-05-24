@@ -1,5 +1,6 @@
 package com.zaneschepke.wireguardautotunnel.core.service.tile
 
+import android.os.Build
 import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
 import com.zaneschepke.wireguardautotunnel.core.orchestration.TunnelCoordinator
@@ -27,8 +28,15 @@ class TunnelControlTile : TileService() {
         super.onDestroy()
     }
 
+    override fun onTileAdded() {
+        super.onTileAdded()
+        updateTileState()
+        startObserving()
+    }
+
     override fun onStartListening() {
         super.onStartListening()
+        updateTileState()
         startObserving()
     }
 
@@ -109,7 +117,12 @@ class TunnelControlTile : TileService() {
 
         qsTile?.apply {
             state = Tile.STATE_ACTIVE
-            subtitle = label
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                subtitle = label
+            }
+            contentDescription = label
+
             updateTile()
         }
     }
@@ -117,7 +130,12 @@ class TunnelControlTile : TileService() {
     private fun setInactive() {
         qsTile?.apply {
             state = Tile.STATE_INACTIVE
-            subtitle = ""
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                subtitle = ""
+            }
+            contentDescription = ""
+
             updateTile()
         }
     }
@@ -125,7 +143,12 @@ class TunnelControlTile : TileService() {
     private fun setUnavailable() {
         qsTile?.apply {
             state = Tile.STATE_UNAVAILABLE
-            subtitle = ""
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                subtitle = ""
+            }
+            contentDescription = ""
+
             updateTile()
         }
     }

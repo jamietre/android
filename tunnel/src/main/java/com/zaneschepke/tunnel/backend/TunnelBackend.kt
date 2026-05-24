@@ -58,6 +58,8 @@ class TunnelBackend(
             var hadVpnTunnels = false
             var hadProxyTunnels = false
 
+            var lastActiveTunnelIds: Set<Int> = emptySet()
+
             actor.state.collect { actorState ->
                 val hasVpnNow =
                     actorState.byTunnelId.values.any { it.running.mode is BackendMode.Vpn }
@@ -68,6 +70,14 @@ class TunnelBackend(
                 val activeTunnels = actorState.byTunnelId.mapValues { it.value.active }
 
                 _status.update { current -> current.copy(activeTunnels = activeTunnels) }
+
+                val currentTunnelIds = activeTunnels.keys
+
+                // update tile
+                if (currentTunnelIds != lastActiveTunnelIds) {
+                    notificationProvider.refreshTile(serviceHolder.context)
+                    lastActiveTunnelIds = currentTunnelIds
+                }
 
                 // VPN cleanup
                 if (hadVpnTunnels && !hasVpnNow) {
@@ -281,10 +291,14 @@ class TunnelBackend(
 
     override fun emergencyStopAllOfTypeSync(modeClass: KClass<out BackendMode>) {
         actor.emergencyStopAllOfType(modeClass)
+        _status.update { it.copy(activeTunnels = emptyMap()) }
+        notificationProvider.refreshTile(serviceHolder.context)
     }
 
     override suspend fun stopAllActiveTunnels(): Result<Unit> = runCatching {
         _status.value.activeTunnels.forEach { (id, _) -> stop(id) }
+        _status.update { it.copy(activeTunnels = emptyMap()) }
+        notificationProvider.refreshTile(serviceHolder.context)
     }
 
     private fun startSystemDnsMonitoring() {
