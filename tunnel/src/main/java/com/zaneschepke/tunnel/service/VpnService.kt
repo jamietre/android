@@ -58,7 +58,7 @@ class VpnService : android.net.VpnService(), KillSwitch, SocketProtector {
             this,
             backend.notificationProvider.vpnNotificationId,
             backend.notificationProvider.vpnInitNotification,
-            SYSTEM_EXEMPT_SERVICE_TYPE_ID,
+            SPECIAL_USE_SERVICE_TYPE_ID,
         )
     }
 
@@ -288,6 +288,6 @@ class VpnService : android.net.VpnService(), KillSwitch, SocketProtector {
         private const val IPV6_DEFAULT_ROUTE = "::"
         private const val DEFAULT_DNS_SERVER = "1.1.1.1"
 
-        private const val SYSTEM_EXEMPT_SERVICE_TYPE_ID = 1 shl 10
+        private const val SPECIAL_USE_SERVICE_TYPE_ID = 1 shl 30
     }
 }
