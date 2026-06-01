@@ -153,6 +153,10 @@ func parseUpstream(upstreamURL string) (network, address string, err error) {
 	shared.LogDebug("DNS", "Parsing upstream URL: %s", upstreamURL)
 	u := upstreamURL
 	if !strings.Contains(u, "://") {
+		// Bare IPv6 addresses must be bracketed for URL parsing (e.g. 2001:db8::1 → [2001:db8::1])
+		if ip := net.ParseIP(u); ip != nil && ip.To4() == nil {
+			u = "[" + u + "]"
+		}
 		u = "udp://" + u
 	}
 	parsed, err := url.Parse(u)
