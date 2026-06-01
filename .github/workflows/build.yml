@@ -86,6 +86,7 @@ jobs:
         run: chmod +x gradlew
       - name: Decode Keystore
         id: decode_keystore
+        if: ${{ inputs.build_type != 'debug' }}
         uses: timheuer/base64-to-file@v2.0
         with:
           fileName: ${{ env.KEY_STORE_FILE }}
